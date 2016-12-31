@@ -1,35 +1,35 @@
 library(shiny)
-library(rvest)
-library(zoo)
-library(ggplot2)
-library(reshape2)
-library(markdown)
+library(shinythemes)
 
-# Define UI for application that plots random distributions 
-shinyUI(navbarPage("Historical Polling Data",
-          tabPanel("Application",
-  				# Sidebar with a slider input for number of observations
-  				sidebarPanel(
-  						dateRangeInput("date", 
-  								"Date Range:", 
-  								start = as.Date("2016-05-12")-60,
-  								end = "2016-05-01", 
-  								min = "2015-01-01",
-  								max = "2016-05-12"),
-  						radioButtons("party",
-  								"Party:",
-  								choices = c("Republican",
-  										"Democrat")),
-  						uiOutput("candidatelist")
-  				),
-  				
-  				# Show a plot of the generated distribution
-  				mainPanel(
-  						tabPanel("Plot", plotOutput("pollPlot"))
-  				)
-    ),
-    
-          tabPanel("About",
-            mainPanel(includeHTML("About.html")))
+# Define UI for application that draws a histogram
+shinyUI(navbarPage(title = "Text Prediction Application",
+                   theme = shinytheme("darkly"),
+                   fluid = TRUE,
+                   tabPanel("About",
+                            mainPanel(includeHTML("About.HTML"))),
+                   tabPanel("Application",
+  div(
+      div(
+        textInput("text", label = h1("Text Prediction", style = "color: #778899"), value = "", placeholder = "Type a phrase..."),
+        textOutput("Prediction", inline = TRUE),
+        style = "display: inline-block;"
+      ),
+      style = "height:175px;text-align:center;"
+  ),
+  hr(),
+  
+  conditionalPanel(condition="output.condition != '0' ",
+    div(
+      div(
+      tableOutput("Table"),
+      style = "display: inline-block; vertical-align: top;"
+      ),
+      
+      div(
+      plotOutput("WordCloud", width = "100%"),
+      style = "display: inline-block; vertical-align: top;"
+      ),
+      style = "width: 70%; margin: 0 auto;"
+    )
   )
-)
+)))
